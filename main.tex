@@ -95,8 +95,14 @@ Game Research Lab: Investigating Movement Flow in 3D Jump'n Runs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-blub
-
+    This research examines the flow of movement in 3D Jump'n Run games, focusing on the control and interaction of the player character in a simulated space. 
+    The study compares various motion mechanics and presets from popular games such as Super Mario 64, Donkey Kong 64, and Banjo Kazooie, as well as our own game called Boss'n Run. 
+    The study involves the creation of a dynamic player character using Blender and Unreal Engine 5. 
+    The movement mechanics are categorized and polished with animations, sound effects, and particle effects. 
+    The paper presents an evaluation method that involves collecting data from the games, comparing motion parameters, and obtaining feedback from 14 participants who played obstacle courses with different movement presets. 
+    Results show that Boss'n Run and Banjo Kazooie received positive feedback, while the Super Mario 64 preset performed poorly. 
+    Future work includes analyzing more movement options and implementing additional movement states, such as swimming, to further investigate the flow of movement in 3D platformers.
+    
 \end{abstract}
 
 
@@ -304,7 +310,7 @@ All movement parameters are recorded and compared in the table \ref{tab:insightI
 Looking at the figure \ref{fig:jump} some useful information can be gained about the jump parameters of the 4 different games.
 
 \begin{figure}[!ht]
-    \caption{ Change of the player character's jump height at full walk speed, performing a normal jump (jump state), over the time in the air on the x-axis and the distance covered with the jump on the y-axis.}
+    \caption{ Change of the player character's jump height (on the z-axis) at full walk speed, performing a normal jump (jump state), over the time in the air (on the x-axis) and the distance covered with the jump (on the y-axis).}
     \centering
     \includegraphics[width=1.0\textwidth]{images/DJump.png}
     \label{fig:jump}
@@ -337,12 +343,57 @@ All jumping paramters are recorded and compared in table \ref{tab:insightIII}.
 
 \subsection{Feedback from players}
 
+Comparing movement parameters on a mathematical level already leads to interesting insights, e.g. for level design.
+Nevertheless, we can not evaluate any of these values about their movement flow.
+Therefore, we prepared a pilot study with 14 participants.
+The idea is to evaluate the different movement presets of each game by having the participants play different obstacle courses based on these specifications.
+To make this possible, we abstracted all the movement parameters into a data asset, a simple asset that stores data related to a specific system in an instance \cite{dataAsset}.
+This allowed us to create data assets for each movement preset and set those parameters at the beginning of a level.
+Then we used the same data asset instance to generate an obstacle course based on the movement parameters, e.g., it was necessary that the platform distances and heights were reachable with the current default.
+Participants were asked three questions:
 
+\begin{enumerate}
+    \item How do you like the jump mechanics? (Rated from 1 (bad) to 5 (good))
+    \item How is the overall Game Flow for you? (Rated from 1 (poor) to 5 (fluid))
+    \item How difficult was the level for you? (Rated from 1 (easy) to 5 (difficult))
+\end{enumerate}
+
+We have summarized the results in the figure \ref{fig:eval}.
+Boss'n Run and Banjo Kazooie had the best jumping feel of the 4 games, while Super Mario 64 had the worst.
+Banjo Kazooie had the best overall gameplay, with Boss'n Run close behind and Super Mario 64 in last place.
+Of all the levels, the Super Mario 64 level was felt to be the hardest and Banjo Kazooie the easiest.
+
+\begin{figure}[!ht]
+    \caption{ The results of the feedback from the 14 participants who played different obstacle courses based on the 4 movement specifications: Boss'n Run (BnR), Super Mario 64 (SM64), Donkey Kong 64 (DK64), and Banjo Kazooie (BK).
+    This was done to determine how good the jumping mechanics felt, how the overall flow of the game felt, and how difficult the obstacle course was perceived to be. 
+    }
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/game_ratings.png}
+    \label{fig:eval}
+\end{figure}
+
+One possible explanation for why Banjo Kazooie was perceived very well overall and Super Mario 64 poorly is the massive difference in gravity and resulting time in the air.
+The longer time spent in the air in the Banjo Kazooie preset allowed players to easily adjust their jump direction, making precise jumps easier and less frustrating.
+Several participants stated that Super Mario 64's preset character moved sluggishly compared to the other presets, which reduced gameplay enjoyment.
+This sluggish behavior can be explained by the slow acceleration/deceleration parameters.
+Other participants stated that regardless of the preset, everyone had an interesting gameplay experience and that it was just a matter of habit.
 
 \section{Conclusion \& Future Work}
 \label{Sec:ConcFuture}
 
-blub
+We examined the movement flow by looking at all the parameters that make it up.
+To do this, we created and implemented a player character with different movement options in Unreal Engine 5.
+We evaluated the movement flow on an objective level by collecting and comparing the movement parameters between our own preset Boss'n Run and three famous games, namely Super Mario 64, Donkey Kong 64 and Banjo Kazooie.
+And on the subjective level, we had 14 participants play different levels based on the 4 motion presets of these games.
+Based on the current results, we can say that the Banjo Kazooie preset is the most promising, followed closely by our own Boss'n Run preset.
+The Super Mario 64 preset performed the worst. \\
+As mentioned in \ref{Sec:Met}, we implemented more movement options than we examined here. 
+In a future work, it would be interesting to analyze and compare all the different jump types, as well as implement other motion states, such as swimming, which are common in games.
+
+\section*{Acknowledgement}
+
+A special thanks goes to Marc Mussmann who implemented a procedural obstacle generator.
+This allowed us to create a small game that we hope the participants enjoyed.
 
 % \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
