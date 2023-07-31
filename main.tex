@@ -36,6 +36,7 @@
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \usepackage{authblk} % For the author section 
 \usepackage{caption} % advanced captions
+\usepackage{amsmath}
 %Mathebib
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
@@ -195,14 +196,76 @@ Last but not least, we have added different sound effects for the different jump
 \label{Sec:Evaluation}
 
 To evaluate the flow of movement for the mechanics implemented so far, we need to look at the parameters that lie at the base of these mechanics.
-For example, the walking mechanic of a player character is defined by \textit{a)} its acceleration \textit{b)} its maximum speed that can be reached, \textit{c)} the deceleration to come back to a stop.
+For example, the walking mechanic of a player character is defined by \textit{a)} its acceleration \textit{b)} its maximum speed that can be reached and \textit{c)} the deceleration to come back to a stop.
 To get a good feel for the different parameters, we studied other famous games that rely heavily on their movement mechanics and collected their data.
 Then we compared these different motion parameter presets by plotting them against each other.
 Finally, we evaluate the motion flow based on the feedback from the players that we collected in a play session.
 
 \subsection{Gathering data from other games}
 
+Since some movement mechanics are inspired by Super Mario 64, we chose it as a comparison game.
+As well as other 3D platformers/adventures released at a similar time,
+in particular Donkey Kong 64 \cite{DonkeyKong64} and Banjo Kazooie \cite{BanjoKazooie}.
+All three games rely heavily on the player character's movement mechanics for their gameplay.
+This makes them ideal candidates.
+To gather information on movement parameters, such as maximum running speed or jump height, we recorded video footage from the respective game.
+We then analyzed it frame by frame using Shotcut\footnote{\url{https://shotcut.org/}}, a free, open-source, cross-platform video editor. 
+For maximum running speed, we captured footage of the character running at full speed for a given estimated distance and time.
+We then calculated acceleration/deceleration by analyzing video footage of the character starting and stopping.
+In Super Mario 64, for example, the acceleration phase is indicated by a particle system, some dust clouds that stop spawning once the character has fully accelerated.
+Now that we know the maximum running speed and the time it takes the character to fully accelerate/decelerate, we can calculate the acceleration and deceleration using the formula \ref{eq:a}.
+
+\begin{equation}
+    a = \frac{\Delta v}{\Delta t}
+    \label{eq:a}
+\end{equation}
+
+For the jump height and gravity, we included material of the character jumping/falling over a certain estimated distance and tracking his time in the air.
+If we use the formula for projectile motion \cite{gdc} and rearrange it, we can calculate gravity with the formula \ref{eq:g}.
+
+\begin{equation}
+    g = -\frac{2h}{t^2}
+    \label{eq:g}
+\end{equation}
+
+If we know the gravity and the estimated jump height, we can calculate the jump velocity of the player character using the formula \ref{eq:vj}.
+
+\begin{equation}
+    v_j = \frac{h - \frac{1}{2}gt^2}{t}
+    \label{eq:vj}
+\end{equation}
+
+All of the data collected is influenced by estimates to some degree, since none of these games have a reference object in metric units, such as a square meter cube.
+Game Maker's Toolkit, for example, collects data from 2D platform games and uses the height and pixels of the player characters as distance metrics \cite{gameMakerTool}.
+Thus, to obtain metric-style motion parameters, estimates must be made.
+
 \subsection{Comparing movement parameters}
+
+After collecting and calculating all the movement parameters of the different games, we present them in two different diagrams:
+
+\begin{enumerate}
+    \item Movement over time and distance, e.g. visualization of acceleration and deceleration phase by adding constant time window of \textit{0.5s} in which the character moves at full speed.
+    \item Jump Height over time and distance, e.g. visualization of the character's jump at full movement speed.
+\end{enumerate}
+
+Looking at the figure \ref{fig:walk_mov}, we can gain some useful insights between the movement parameters of the different games.
+
+\begin{figure}[!ht]
+    \caption{ Change of the player character's movement in three phases:
+    \textit{a)} the acceleration phase, starting from zero velocity (idle state) to max walk velocity (walk state), \textit{b)} the constant phase, moving at full walk speed for a fixed amount of time (\textit{0.5s}) and 
+    \textit{c)} the deceleration phase, to get from full walk speed (walk state) back to zero velocity (idle state).
+    Velocity is plotted on the z-axis over the time on the x-axis and the distance on the y-axis needed to go through the three phases. 
+    }
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/WalkMov.png}
+    \label{fig:walk_mov}
+\end{figure}
+
+\textit{Boss'n Run} has the highest speed, acceleration and deceleration of the 4 games.
+\textit{Super Mario 64} has the lowest speed, acceleration and deceleration, also it takes the longest amount of time to start running and come to a stop again.
+\textit{Donkey Kong 64} takes the longest distance traveled to start running and come to a stop again. 
+\textit{BanjoKazooie} takes the least time and the least distance to run and come to a stop again.
+All movement parameters are recorded and compared in the table \ref{tab:insightII}.
 
 % \begin{table*}[htbp]
 %     \centering
@@ -219,8 +282,6 @@ Finally, we evaluate the motion flow based on the feedback from the players that
 %     \caption{A 4x4 Table with Improved Formatting and Corrected Color Coding}
 %     \label{tab:insightI}
 % \end{table*}
-
-
 \begin{table*}[htbp]
     \centering
     \begin{tabular}{cccccc}
@@ -240,6 +301,20 @@ Finally, we evaluate the motion flow based on the feedback from the players that
     \label{tab:insightII}
 \end{table*}
 
+Looking at the figure \ref{fig:jump} some useful information can be gained about the jump parameters of the 4 different games.
+
+\begin{figure}[!ht]
+    \caption{ Change of the player character's jump height at full walk speed, performing a normal jump (jump state), over the time in the air on the x-axis and the distance covered with the jump on the y-axis.}
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/DJump.png}
+    \label{fig:jump}
+\end{figure}
+
+\textit{Boss'n Run} still has the highest ground speed and therefore can travel the farthest distance with its jump.
+\textit{Super Mario 64} has the highest gravity of all the games and also the highest jump speed, resulting in the greatest jump height. Nevertheless, its ground speed is the lowest, resulting in the shortest jump distance.
+\textit{Donkey Kong 64} has the lowest jump height and the least time in the air of all.
+\textit{Banjo Kazooie} has the lowest gravity and jump speed, but the longest time in the air of all.
+All jumping paramters are recorded and compared in table \ref{tab:insightIII}.
 
 \begin{table*}[htbp]
     \centering
@@ -260,8 +335,8 @@ Finally, we evaluate the motion flow based on the feedback from the players that
     \label{tab:insightIII}
 \end{table*}
 
-
 \subsection{Feedback from players}
+
 
 
 \section{Conclusion \& Future Work}
