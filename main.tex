@@ -131,19 +131,52 @@ Both the desktop version and the VR port can be downloaded and played at
 
 In the following section \ref{Sec:Game} we focus on the development of the desktop version of the game, 
 especially on the key components such as the player character or the O2 system.
-In the \ref{Sec:VR} section, we go into the necessary steps to convert the desktop version into a functional VR version 
-and focus on the most important challenges, such as the player character or the user interface (UI).
+In the \ref{Sec:VR} section, we go into the necessary steps to convert the desktop version into a functional VR version,
+how to mitigate motion sickness 
+and focus on the most important development challenges, such as the player character or the user interface (UI).
 In the \ref{Sec:Performance} section, the VR version is briefly evaluated in terms of its performance.
 Finally, in section \ref{Sec:ConcFuture} we conclude our work in the form of insights and potential future work.
 
-\section{The game development}
+\section{game development}
 \label{Sec:Game}
-%Unreal Engine 5.3
-Some talk about the development of the game with course ISPN and what I did do.
+% Unreal Engine 5.1
+\textit{Abyssal Enigma} was developed with Unreal Engine 5.1\footnote{\url{https://www.unrealengine.com/en-US/blog/unreal-engine-5-1-is-now-available}},
+as the setting of the game focuses on a realistic underwater world.
+Therefore we explored a lot with different shaders simulating realistic underwater fog 
+and used Quixel Mega Scan\footnote{\url{https://quixel.com/megascans}} assets for corals, stones and a sunken plane for example. 
+% Player character
+For the player character we used a space suit (since there are a lot more free spacesuits available than diver suits) 
+and tweaked the color in Blender and reworked the boots to fins.
+For realistic swim animations we used an asset pack and used Unreal's retargeting system to allows us to apply animations developed for
+other characters to our character \cite{retarget}.
+To complete the visuals we worked on a particle system representing bubbles and attached them to the hands of the character, further increasing the underwater immersion.
+This summarizes to a true first person experience as seen in image \ref{fig:oldPlayer}, since there is an complete rigged model attached to the camera instead of just the arms.
+
+\begin{figure}[!ht]
+    \caption{True first person character with a fully rigged suit, bubble particles systems attached to the hand bones and the camera attached to the head bone.}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/oldPlayer.png}
+    \label{fig:oldPlayer}
+\end{figure}
+
+% Levels
+The game consists of 5 consecutive levels:
+\begin{enumerate}
+    \item The start screen showing the research ship on the water surface
+    \item A coral riff right beneath the surface
+    \item An algae forest in dirty churned-up water
+    \item a deep sea volcanic rift inhabiting a gigantic monster
+    \item a vast dessert
+\end{enumerate}
+
+
+% O2 system
+% Assets and placement
+% Integrating voice overs
 
 \section{VR Port}
 \label{Sec:VR}
-
+% Unreal Engine 5.3
 Unreal VR template
 Reworking character
 Motion Sickness
