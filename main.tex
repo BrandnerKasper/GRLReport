@@ -197,11 +197,74 @@ These dialogs help unravel the mystery and are displayed in the UI and fully voi
 \section{VR Port}
 \label{Sec:VR}
 % Unreal Engine 5.3
-Unreal VR template
-Reworking character
-Motion Sickness
-Anti motion sickness techniques
-UI
+The VR version \textit{Abyssal Enigma Dive In Edition} was ported and developed in Unreal Engine 5.3\footnote{\url{https://www.unrealengine.com/en-US/blog/unreal-engine-5-3-is-now-available}}.
+Next to some improvments regarding Temporal Super Resolution (TSR), this fixed some rendering issues on AMD graphics cards.
+% VR Setup
+For the development process, I used an Oculus Quest in combination with SteamVR\footnote{\url{https://store.steampowered.com/app/250820/SteamVR/}} to stream my desktop to the headset.
+Unreal Engine allows with this setup the current scene to be tested inside the editor, instead of compiling the project.
+This setup and feature allows for faster development and is a nice workflow overall.
+% Unreal VR template
+With that out of the way, I started exploring VR in Unreal.
+For that I used the standard VR template\footnote{\url{https://docs.unrealengine.com/5.0/en-US/vr-template-in-unreal-engine/}}, which already comes with a working VR pawn.
+The pawn supports head and finger tracking (and therefore input mapping).
+Unfortunately the only movement option inside the template is via teleportation.
+(The player points with one hand to a place on the ground he wants to instantaniously move.)
+This form of movement is unusable for allowing free movement in 3D or swimming.  
+% Reworking character & Motion Sickness
+So our only real option is to allow continous movement for the player in VR.
+But this introduces a big problem \textbf{Motion Sickness}.
+
+\subsection{Anti motion sickness techniques}
+
+Moving in VR, but not in real life leads to a wrong interpretation of our brains, as we expect to move, but we don't.
+Therefore our brains think we are sick or got poisend and therefore react with nausea.
+To mitigate this problem, we came up with four anti-motion sickness techniques.
+
+\subsubsection{Head-directed steering}
+
+Head-directed steering has proven to mitigate motion sickness \cite{jerald2017vr}.
+It only allows movement in the direction of the head, therefore the head steers the movement of the player character.
+The big advantage of this technique, it is easy to implement as I only need to get the forward vector of the camera for the direction.
+The player can move in head direction while moving the control stick of either controller forward.
+Another advantage, it is quite intuitive to move around like this in freely in 3D.
+
+\subsubsection{Vignette effect}
+
+Reducing the field of view while moving in VR, reduces the intensity of the perceived motion and therefore mitigates motion sickness \cite{basting2017effectiveness}.
+To achive this vignette effect seamlessly, I wrote a custom shader used Unreal's Material Collections \cite{collections}.
+Material Colletions allow to safe and reference shader variables inside a collection instance. 
+The collection allowed me to reference the vignette strength variable inside my player character, steadily increasing the effect the faster my character moved. 
+
+\subsubsection {Rest Frame - The virtual nose}
+
+Having an object constantly in line of sight, which confirms you are resting is called a rest frame.
+ \parencite{wienrich2018virtual} have shown that adding a virtual nose for a VR Jump'n Run mitigated motion sickness.
+ Our virtual nose is a diver's mask and can be seen in \ref{fig:nose}
+
+ \begin{figure}[!ht]
+    \caption{Our virtual nose: A diver's mask is always in your line of sight, confirming you are resting.}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/nose.png}
+    \label{fig:nose}
+\end{figure}
+
+\subsubsection{Simulating swim motion}
+
+Since we are swimming in VR, I played around with a simple idea to simulate a swim motion.
+I attached a collision box in front of the camera, but an arm length away as seen in figure \ref{fig:swim}.
+The idea is: 
+If one or both hands enter the collision box and leave after short duration like 0.75 seconds I assume the player wants to swim.
+For that I move the player for half a second or when using both hands a full second in head direction.
+
+\begin{figure}[!ht]
+    \caption{Our simple swim motion idea: A collision box is attached to the camera.
+    While one or both hands enter the collision box (changing the material of the hand to green) and leaving in short timespan of 0.75 seconds, the player will move in head direction.}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/swim.png}
+    \label{fig:swim}
+\end{figure}
+
+% UI
 
 \section{Performance}
 \label{Sec:Performance}
