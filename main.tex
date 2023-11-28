@@ -131,26 +131,26 @@ Both the desktop version and the VR port can be downloaded and played at
 
 In the following section \ref{Sec:Game} we focus on the development of the desktop version of the game, 
 especially on the key components such as the player character or the O2 system.
-In the \ref{Sec:VR} section, we go into the necessary steps to convert the desktop version into a functional VR version,
+In section \ref{Sec:VR}, we go into the necessary steps to convert the desktop version into a functional VR version,
 how to mitigate motion sickness 
 and focus on the most important development challenges, such as the player character or the user interface (UI).
-In the \ref{Sec:Performance} section, the VR version is briefly evaluated in terms of its performance.
+In section \ref{Sec:Performance}, the VR version is briefly evaluated in terms of its performance.
 Finally, in section \ref{Sec:ConcFuture} we conclude our work in the form of insights and potential future work.
 
 \section{game development}
 \label{Sec:Game}
 % Unreal Engine 5.1
-\textit{Abyssal Enigma} was developed with Unreal Engine 5.1\footnote{\url{https://www.unrealengine.com/en-US/blog/unreal-engine-5-1-is-now-available}},
+\textit{Abyssal Enigma} was developed with the Unreal Engine 5.1\footnote{\url{https://www.unrealengine.com/en-US/blog/unreal-engine-5-1-is-now-available}},
 as the setting of the game focuses on a realistic underwater world.
-Therefore we explored a lot with different shaders simulating realistic underwater fog 
-and used Quixel Mega Scan\footnote{\url{https://quixel.com/megascans}} assets for corals, stones and a sunken plane for example. 
+Therefore, we experimented a lot with different shaders that simulate realistic underwater fog 
+and used Quixel Mega Scan\footnote{\url{https://quixel.com/megascans}} assets for corals, rocks and a sunken airplane for example.
+
 % Player character
-For the player character we used a space suit (since there are a lot more free spacesuits available than diver suits) 
-and tweaked the color in Blender and reworked the boots to fins.
-For realistic swim animations we used an asset pack and used Unreal's retargeting system to allows us to apply animations developed for
-other characters to our character \cite{retarget}.
-To complete the visuals we worked on a particle system representing bubbles and attached them to the hands of the character, further increasing the underwater immersion.
-This summarizes to a true first person experience as seen in image \ref{fig:oldPlayer}, since there is an complete rigged model attached to the camera instead of just the arms.
+We used a spacesuit for the player character (as there are many more free spacesuits than diving suits) 
+and customized the color in Blender and turned the boots into fins.
+For realistic swimming animations, we used an asset pack and used Unreal's retargeting system to apply animations developed for other characters to our character \cite{retarget}.
+To complete the look, we worked on a particle system to represent bubbles and attached them to the character's hands to further enhance the underwater immersion.
+This results in a true first-person perspective, as can be seen in image \ref{fig:oldPlayer}, as a complete rigged model is attached to the camera and not just the arms.
 
 \begin{figure}[!ht]
     \caption{True first person character with a fully rigged suit, bubble particles systems attached to the hand bones and the camera attached to the head bone.}
@@ -169,10 +169,30 @@ The game consists of 5 consecutive levels:
     \item a vast dessert
 \end{enumerate}
 
+Since the start screen only allows you to start the game, levels 2,3 and 4 allow free 3D movement in the form of swimming, while the last level only allows movement on the desert floor.
+Therefore, an additional walking animation plus logic to switch between swimming and walking mode had to be implemented, which also hides the bubble particle systems.
 
 % O2 system
-% Assets and placement
+To guide the player and limit 3D movement, we have implemented an O2 mechanic.
+The O2 mechanic is a simple timer, the player character starts with 100\% O2 and loses either 0.5\% or 0.1\% every second depending on whether they move or not.
+This results in a total time span of 200 seconds or ~3 minutes to 1000 seconds or ~16 minutes before drowning and respawning.
+At a movement speed of 6 meters per second, the player could cover a maximum distance of 1200 meters in the game world.
+(Note: The Unreal Engine uses centimeters, but this can easily be converted to meters). 
+The maximum movement speed as well as the O2 consumption for movement and non-movement were stored in a data asset.
+This allowed us to do two things:
+(a) display the amount of time spent underwater and the distance traveled by the player, which allowed us to design and balance each level
+and b) create multiple instances of this data object to change the player's behavior to our liking.
+With this thought process, we placed O2 refill stations in moderately accessible areas and gave the player some room for exploration.
+
+% Guiding elements
+As mentioned earlier, the game tries to achieve a realistic underwater feel by adding a dense fog that restricts the player's vision.
+Therefore, we have added orange orientation lights along the path for the player to explore and a UI marker for the next point of interest.
+As soon as a point of interest is reached, the UI marker appears at the next position in the list.
+
 % Integrating voice overs
+As the game focuses primarily on its narrative, we have included logbooks at points of interest where the story is presented in text form.
+In the game there are two co-workers, Juan and Sarah, who talk to Charlie from the research ship on the surface.
+These dialogs help unravel the mystery and are displayed in the UI and fully voiced by two external voice actors (see \ref{Sec:Acknowledgement}).
 
 \section{VR Port}
 \label{Sec:VR}
