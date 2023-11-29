@@ -197,49 +197,50 @@ These dialogs help unravel the mystery and are displayed in the UI and fully voi
 \section{VR Port}
 \label{Sec:VR}
 % Unreal Engine 5.3
-The VR version \textit{Abyssal Enigma Dive In Edition} was ported and developed in Unreal Engine 5.3\footnote{\url{https://www.unrealengine.com/en-US/blog/unreal-engine-5-3-is-now-available}}.
-Next to some improvments regarding Temporal Super Resolution (TSR), this fixed some rendering issues on AMD graphics cards.
+The VR version \textit{Abyssal Enigma Dive In Edition} has been ported and developed in Unreal Engine 5.3\footnote{\url{https://www.unrealengine.com/en-US/blog/unreal-engine-5-3-is-now-available}}.
+In addition to some improvements in terms of Temporal Super Resolution (TSR), some rendering problems on AMD graphics cards have also been fixed.
 % VR Setup
 For the development process, I used an Oculus Quest in combination with SteamVR\footnote{\url{https://store.steampowered.com/app/250820/SteamVR/}} to stream my desktop to the headset.
-Unreal Engine allows with this setup the current scene to be tested inside the editor, instead of compiling the project.
-This setup and feature allows for faster development and is a nice workflow overall.
+With this setup, the Unreal Engine allows you to test the current scene in the editor instead of compiling the project.
+This setup and feature allows for faster development and is overall a nice workflow.
+
 % Unreal VR template
-With that out of the way, I started exploring VR in Unreal.
-For that I used the standard VR template\footnote{\url{https://docs.unrealengine.com/5.0/en-US/vr-template-in-unreal-engine/}}, which already comes with a working VR pawn.
-The pawn supports head and finger tracking (and therefore input mapping).
-Unfortunately the only movement option inside the template is via teleportation.
-(The player points with one hand to a place on the ground he wants to instantaniously move.)
-This form of movement is unusable for allowing free movement in 3D or swimming.  
+After that was clarified, I started working with VR in Unreal.
+I used the standard VR template\footnote{\url{https://docs.unrealengine.com/5.0/en-US/vr-template-in-unreal-engine/}}, which is already equipped with a working VR character.
+The character supports head and finger tracking (and therefore input mapping).
+Unfortunately, the only movement option within the template is teleportation.
+(The player points with one hand to a place on the floor where he wants to move immediately).
+This form of movement is useless for free movement in 3D or swimming.
 % Reworking character & Motion Sickness
-So our only real option is to allow continous movement for the player in VR.
-But this introduces a big problem \textbf{Motion Sickness}.
+So our only real option is to allow the player to move continuously in VR.
+But that comes with a big problem: \textbf{Motion Sickness}.
 
 \subsection{Anti motion sickness techniques}
 
-Moving in VR, but not in real life leads to a wrong interpretation of our brains, as we expect to move, but we don't.
-Therefore our brains think we are sick or got poisend and therefore react with nausea.
-To mitigate this problem, we came up with four anti-motion sickness techniques.
+Moving in VR but not in real life leads to a false interpretation of our brain, as we expect to move but we do not.
+As a result, our brain thinks we are sick or have poisoned ourselves and therefore reacts with nausea.
+To alleviate this problem, we have developed four techniques to combat motion sickness.
 
 \subsubsection{Head-directed steering}
 
 Head-directed steering has proven to mitigate motion sickness \cite{jerald2017vr}.
-It only allows movement in the direction of the head, therefore the head steers the movement of the player character.
-The big advantage of this technique, it is easy to implement as I only need to get the forward vector of the camera for the direction.
-The player can move in head direction while moving the control stick of either controller forward.
-Another advantage, it is quite intuitive to move around like this in freely in 3D.
+It only allows movement in the direction of the head, so the head controls the movement of the player character.
+The big advantage of this technique is that it is easy to implement as I only need the forward vector of the camera for the direction.
+The player can move in the direction of the head while moving the stick of one of the two controllers forward.
+Another advantage is that it is quite intuitive to move freely in 3D this way.
 
 \subsubsection{Vignette effect}
 
-Reducing the field of view while moving in VR, reduces the intensity of the perceived motion and therefore mitigates motion sickness \cite{basting2017effectiveness}.
-To achive this vignette effect seamlessly, I wrote a custom shader used Unreal's Material Collections \cite{collections}.
-Material Colletions allow to safe and reference shader variables inside a collection instance. 
-The collection allowed me to reference the vignette strength variable inside my player character, steadily increasing the effect the faster my character moved. 
+Reducing the field of view during movement in VR reduces the intensity of perceived movement and thus mitigates motion sickness \cite{basting2017effectiveness}.
+To achieve this vignette effect seamlessly, I wrote a custom shader that uses Unreal's material collections \cite{collections}.
+Material Collections allow shader variables to be stored and referenced within a collection instance. 
+The collection allowed me to reference the vignette strength variable within my player character and steadily increase the effect the faster my character moved.
 
 \subsubsection {Rest Frame - The virtual nose}
 
 Having an object constantly in line of sight, which confirms you are resting is called a rest frame.
- \parencite{wienrich2018virtual} have shown that adding a virtual nose for a VR Jump'n Run mitigated motion sickness.
- Our virtual nose is a diver's mask and can be seen in \ref{fig:nose}
+For example adding a virtual nose for a VR Jump'n Run mitigated motion sickness \cite{wienrich2018virtual}.
+Our virtual nose is a divering mask and can be seen in \ref{fig:nose}
 
  \begin{figure}[!ht]
     \caption{Our virtual nose: A diver's mask is always in your line of sight, confirming you are resting.}
@@ -250,11 +251,11 @@ Having an object constantly in line of sight, which confirms you are resting is 
 
 \subsubsection{Simulating swim motion}
 
-Since we are swimming in VR, I played around with a simple idea to simulate a swim motion.
-I attached a collision box in front of the camera, but an arm length away as seen in figure \ref{fig:swim}.
-The idea is: 
-If one or both hands enter the collision box and leave after short duration like 0.75 seconds I assume the player wants to swim.
-For that I move the player for half a second or when using both hands a full second in head direction.
+Since we are swimming in VR, I played with a simple idea to simulate a swimming motion.
+I placed a collision box in front of the camera, but an arm's length away, as shown in figure \ref{fig:swim}.
+The idea behind this is: 
+If one or both hands enter the collision box and leave it again after a short time, about 0.75 seconds, I assume that the player wants to swim.
+To do this, I move the player in the direction of the head for half a second or, if both hands are used, for a whole second.
 
 \begin{figure}[!ht]
     \caption{Our simple swim motion idea: A collision box is attached to the camera.
@@ -264,7 +265,23 @@ For that I move the player for half a second or when using both hands a full sec
     \label{fig:swim}
 \end{figure}
 
-% UI
+\subsection{The UI problem}
+
+Adding UI to the viewport, as in the desktop version of this game, does not work with VR as the headset has two displays and the UI does not render correctly.
+In order for our UI to render correctly, we had to move it into world space, as shown in Figure \ref{fig:UI}.
+
+\begin{figure}[!ht]
+    \caption{Our player's UI in worlspace placed 1.2 meters away from the camera. We added contrast to the UI by adding a black background to the fine green lines.}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/UI.png}
+    \label{fig:UI}
+\end{figure}
+
+We had to add a black background to our user interface to increase the contrast as it was hard to read in VR \cite{dingler2018vr}.
+Since we were trying to port the UI from the desktop version, we had to make a lot of changes.
+For example, when triggering dialogs, an animation plays in the UI and the dialog is displayed at the bottom of the screen.
+As we added a rest frame in the shape of our diving mask, this was sometimes unreadable as the mask is closer to the camera than the UI.
+Finding the perfect distance and making all UI states readable at the same time was a delicate task.
 
 \section{Performance}
 \label{Sec:Performance}
