@@ -304,14 +304,14 @@ The Oculus Quest has a framerate of 72 and a resolution of 2064 x 2272 per eye, 
     \label{fig:descent}
 \end{figure}
 
-I played all levels with the Steam overlay turned on and noted 1\% lows (peaks in the frame time curve) to evaluate the performance of our game.
+I played all levels with the SteamOverlay turned on and noted 1\% lows (peaks in the frame time curve) to evaluate the performance of our game.
 An important value is the number 13 milliseconds, as frametimes below this number ensure the 72 frame rate of the quest headset. 
 In the graph \ref{fig:descent} we can see the 1\% lows of each of the 5 levels.
 Only the start screen and the Algea Forest fall above 13 ms.
 In the start screen this is due to the very elaborate shader for the water surface, but as the start screen does not allow any movement, this is not such a big problem.
 The algae forest poses a bigger problem as it can have a lot of geometry in the line of sight and of course we are moving.
 To mitigate the performance issues, we enabled TSR with a screen resolution of 50\%.
-We tried to go lower, but the upsampling technique has trouble upsampling the space text, making it too hard to read.
+We tried to go lower, but the upsampling technique has trouble upsampling the now world space text, making it too hard to read.
 
 \section{Conclusion \& Future Work}
 \label{Sec:ConcFuture}
@@ -328,6 +328,7 @@ In terms of performance, more aggressive culling could be an option, and replaci
 \section*{Acknowledgement}
 \label{Sec:Acknowledgement}
 For the desktop game \textit{Abyssal Enigma} I would like to thank Andreas Braun, Felix Heimbeck, Johanna-Maria Zipper, Miklas Neely and Marianne Pouysegur.
+I want to thank Kerstin and Benjamin Muth for lending their voices to the Sarah and Juan, the coworkers of Charlie.
 For the VR version \textit{Abyssal Enigma Dive In Edition} I would like to thank Miklas Neely again for creating a diving mask and Andreas Braun for his support with the VR development.
 Last but not least, I would like to thank Jean-Luc Lugrin for his 3D User Iinterfaces course, which was a great help for the development in VR.
 
