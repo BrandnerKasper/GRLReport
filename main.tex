@@ -95,7 +95,12 @@ Game Research Lab: Abyssal Enigma Dive In Edition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-    Horor VR stuff Abyssal Engima bla bla
+    This Game Research Lab presents the development of "Abyssal Enigma Dive In Edition", a virtual reality (VR) adaptation of the original desktop game "Abyssal Enigma". 
+    Using Unreal Engine 5.3, the VR version tackles the challenges associated with motion sickness through techniques such as head-controlled steering, a vignette effect, a virtual nose and the simulation of swimming movements.
+    The desktop version focuses on narrative gameplay and offers a realistic underwater experience with guiding elements, an O2 mechanic and voice-over dialog. 
+    In contrast, the VR port looks at the unique challenges of continuous movement in VR.
+    The research concludes with insights into the potential of VR for adventure gaming, recognizing the importance of mitigating motion sickness. 
+    Suggestions include reworking the user interface for VR, exploring realistic options for swimming motion, and optimizing performance through techniques such as aggressive culling and advanced upsampling methods such as DLSS.
     
 \end{abstract}
 
@@ -286,21 +291,46 @@ Finding the perfect distance and making all UI states readable at the same time 
 \section{Performance}
 \label{Sec:Performance}
 
-Short Performance analysis.
-BalkenDiagram showing framerate of different levels + 13 ms line above is bad!
+Since a stuttering VR experience led to motion sickness for me, I did a quick performance analysis.
+First of all, the game only runs on my PC and not natively on the Quest headset.
+I am using a 7900 XTX for the GPU and a Ryzen 7900 for the CPU.
+The Oculus Quest has a framerate of 72 and a resolution of 2064 x 2272 per eye, according to SteamOverlay. 
+
+\begin{figure}[!ht]
+    \caption{Performance analysis of the frametime spikes of each level in Abyssal Enigma Dive In Edition. 
+    As the Oculus Quest has a framerate of 72, a frametime of 13 mili seconds or below is important for a stutter free VR experience.}
+    \centering
+    \includegraphics[width=1.05\textwidth]{images/descent.png}
+    \label{fig:descent}
+\end{figure}
+
+I played all levels with the Steam overlay turned on and noted 1\% lows (peaks in the frame time curve) to evaluate the performance of our game.
+An important value is the number 13 milliseconds, as frametimes below this number ensure the 72 frame rate of the quest headset. 
+In the graph \ref{fig:descent} we can see the 1\% lows of each of the 5 levels.
+Only the start screen and the Algea Forest fall above 13 ms.
+In the start screen this is due to the very elaborate shader for the water surface, but as the start screen does not allow any movement, this is not such a big problem.
+The algae forest poses a bigger problem as it can have a lot of geometry in the line of sight and of course we are moving.
+To mitigate the performance issues, we enabled TSR with a screen resolution of 50\%.
+We tried to go lower, but the upsampling technique has trouble upsampling the space text, making it too hard to read.
 
 \section{Conclusion \& Future Work}
 \label{Sec:ConcFuture}
 
-UI should be redesigned completetely
-More Movement Options explored in 3D VR fyling/swimming
-Performance increased with DLSS and optimizations
+VR has great potential for adventure games and especially for the walking simulator subgenre, 
+as it leads to more unique exploration experiences and supports immersion in the narrative.
+Nevertheless, the problem of motion sickness should not be underestimated and should be treated with caution.
+Even seemingly small effects, such as the vignette effect, can have a big impact.
+Porting the UI to world space was the obvious choice, but not the best.
+The UI should be reworked to be more suitable for VR, e.g. the O2 bar could be placed on the player's VR wrist and resemble a watch.
+More complex movement options could be explored to simulate a more realistic swimming motion.
+In terms of performance, more aggressive culling could be an option, and replacing TSR with Deep Learning Super Sampling (DLSS) with frame generation by the official plugin could lead to more stable image quality as well as an increase in frame rate.
 
 \section*{Acknowledgement}
 \label{Sec:Acknowledgement}
+For the desktop game \textit{Abyssal Enigma} I would like to thank Andreas Braun, Felix Heimbeck, Johanna-Maria Zipper, Miklas Neely and Marianne Pouysegur.
+For the VR version \textit{Abyssal Enigma Dive In Edition} I would like to thank Miklas Neely again for creating a diving mask and Andreas Braun for his support with the VR development.
+Last but not least, I would like to thank Jean-Luc Lugrin for his 3D User Iinterfaces course, which was a great help for the development in VR.
 
-Miklas Neely for creating a diver's mask asset and Andreas Braun for contionous support on VR development.
-And Missie Legral for his course 3DUI which was a great samasurium for does and donts in VR.
 % \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
                                   % the textheight of the last page by a suitable amount.
